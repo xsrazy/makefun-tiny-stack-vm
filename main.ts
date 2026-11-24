@@ -53,7 +53,9 @@ function run(P, I) {
     if (o === 0x53) return end(S[--sp] & 255); // EXIT, low byte
 
     // Two-operand arithmetic / logic / comparison ops (0x10-0x16, 0x18-0x1a, 0x1c-0x1e, 0x20-0x22).
-    if (o >= 0x10 && o <= 0x22 && o !== 0x17 && o !== 0x1b && o !== 0x1f) {
+    // NEG (0x17) and NOT (0x1b) were handled above; 0x1f is not an opcode, so
+    // the decode step already trapped it before reaching here.
+    if (o >= 0x10 && o <= 0x22) {
       const b = S[sp - 1], a = S[sp - 2];
       let r;
       if (o === 0x10) r = (a + b) | 0; // ADD, wraps
